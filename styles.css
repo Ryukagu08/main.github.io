@@ -4,7 +4,8 @@ body, html {
   padding: 0;
   font-family: Arial, sans-serif;
   height: 100%;
-  background: #fff; /* Main content background */
+  background: #2b3137; /* Main content background */
+  color: white;
 }
 
 .container {
@@ -15,12 +16,15 @@ body, html {
 /* Sidebar Styles */
 .sidebar {
   width: 250px;
-  background: #333;
+  background: #24292e;
   color: #fff;
   padding: 40px 20px 20px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  font-weight: bold;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.2);
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .logo-name {
@@ -67,8 +71,7 @@ body, html {
 }
 
 .index ul li a.tab:hover {
-  transform: translateX(-20px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+  transform: translateX(20px);
 }
 
 .index ul li a.tab::after {
@@ -98,7 +101,7 @@ section {
 }
 
 footer {
-  background: #333;
+  background: #24292e;
   color: #fff;
   text-align: center;
   padding: 10px 0;
@@ -107,16 +110,16 @@ footer {
   bottom: 0;
 }
 
-/* styles.css changes */
+/* Updated overlay styles */
 #transition-overlay {
   position: fixed;
-  left: 250px;
+  left: 300px; /* Start from the left edge of the sidebar */
   top: 0;
   height: 100%;
-  background: #333;
+  background: #2b3137; /* Match main background */
   pointer-events: none;
-  z-index: 9999;
+  z-index: 9998;
   width: 0;
-  transform-origin: left center;
+  box-shadow: -4px 0 15px rgba(0,0,0,0.1);
   transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
 }
