@@ -104,12 +104,16 @@ body, html {
   flex-grow: 1;
   padding: 20px;
   overflow-y: auto;
-  opacity: 0;               /* Start hidden */
-  transition: opacity 1.6s ease; /* Fade in transition */
+  opacity: 1;
+  transition: opacity 1.6s ease;
 }
 
 .fade-in {
   opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
 }
 
 section {

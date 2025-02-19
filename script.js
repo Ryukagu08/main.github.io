@@ -1,51 +1,50 @@
 document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.index ul li a.tab');
-  const overlay = document.getElementById('transition-overlay');
-  const sidebar = document.querySelector('.sidebar');
-  const sidebarWidth = 250;
+  const contentContainer = document.querySelector('.content');
 
   navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      const target = this.getAttribute('href');
+      const url = this.getAttribute('href');
 
-      // Get button position
-      const rect = this.getBoundingClientRect();
-      const buttonWidth = rect.width;
+      // Fade out the current content
+      if (contentContainer) {
+        contentContainer.classList.remove('fade-in');
+        contentContainer.classList.add('fade-out');
+      }
 
-      // Set overlay initial position and size
-      overlay.style.left = `${sidebarWidth}px`; // Start from the left edge of the sidebar
-      overlay.style.width = `${buttonWidth}px`;
-      overlay.style.height = `${rect.height}px`;
-      overlay.style.top = `${rect.top + window.scrollY}px`;
-
-      // Add animations
-      this.classList.add('slide-out');
-
-      // Animate overlay to cover the viewport from the sidebar edge
-      requestAnimationFrame(() => {
-        overlay.style.left = `300px`;
-        overlay.style.width = `calc(100% - 320px)`;
-        overlay.style.top = '0';
-        overlay.style.height = '100%';
-      });
-
-      // Navigate after animation
+      // After the fade-out (adjust duration as needed), load new content via AJAX
       setTimeout(() => {
-        // Reset elements
-        overlay.removeAttribute('style');
-        this.classList.remove('slide-out');
-        window.location.href = target;
-      }, 600);
+        fetch(url)
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const newContent = doc.querySelector('.content');
+            if (newContent && contentContainer) {
+              contentContainer.innerHTML = newContent.innerHTML;
+              // Fade the new content in
+              contentContainer.classList.remove('fade-out');
+              contentContainer.classList.add('fade-in');
+            }
+            // Update browser URL without reloading the sidebar
+            history.pushState(null, '', url);
+          })
+          .catch(err => {
+            console.error('Error loading page:', err);
+            // Fallback to full navigation in case of error
+            window.location.href = url;
+          });
+      }, 600); // This delay should match your fade-out transition duration
     });
   });
 
-  // Fade-in effect for the right-hand content
+  // On page load, ensure content is visible
   const content = document.querySelector('.content');
   if (content) {
     setTimeout(() => {
       content.classList.add('fade-in');
-    }, 300); // Delay before fade-in starts (optional)
+    }, 300);
   }
 });
 
