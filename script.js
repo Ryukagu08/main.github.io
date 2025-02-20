@@ -81,7 +81,7 @@ function loadRepos() {
     return languageColors[language] || '#ccc';
   }
 
-  fetch(`https://api.github.com/users/${username}/repos`)
+  fetch(`https://api.github.com/users/${username}/repos?sort=updated&direction=desc`)
     .then(response => response.json())
     .then(repos => {
       console.log("Fetched Repositories:", repos);
