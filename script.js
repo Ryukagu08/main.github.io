@@ -127,3 +127,18 @@ function parseEmojis(text) {
   };
   return text.replace(/:\w+:/g, match => emojiMap[match] || match);
 }
+
+document.getElementById('theme-toggle').addEventListener('click', function() {
+  const currentTheme = document.querySelector('link[rel="stylesheet"]').getAttribute('href');
+  const themeIcon = this.querySelector('i');
+
+  if (currentTheme.includes('style-dark.css')) {
+    document.querySelector('link[rel="stylesheet"]').setAttribute('href', 'style-light.css');
+    themeIcon.classList.remove('fa-sun');
+    themeIcon.classList.add('fa-moon');
+  } else {
+    document.querySelector('link[rel="stylesheet"]').setAttribute('href', 'style-dark.css');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  }
+});

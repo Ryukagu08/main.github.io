@@ -99,6 +99,23 @@ body, html {
   background: rgba(255,255,255,0.6);
 }
 
+/* Theme Button */
+#theme-toggle {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+#theme-toggle:hover {
+  transform: scale(1.1);
+}
+
 /* Main Content Styles */
 .content {
   flex-grow: 1;
