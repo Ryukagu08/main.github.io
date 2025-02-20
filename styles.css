@@ -28,7 +28,7 @@ body, html {
 }
 
 .sidebar:hover {
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 1);
 }
 
 .logo-name {
