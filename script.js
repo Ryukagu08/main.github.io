@@ -1,3 +1,42 @@
+// Theme Preference
+(function applySavedTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  const themeStyle = document.getElementById('theme-style');
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = themeToggle.querySelector('i');
+
+  // Apply saved theme
+  themeStyle.href = `style-${savedTheme}.css`;
+  
+  // Set correct icon
+  if (savedTheme === 'light') {
+    themeIcon.classList.replace('fa-sun', 'fa-moon');
+  } else {
+    themeIcon.classList.replace('fa-moon', 'fa-sun');
+  }
+})();
+
+// Modified theme toggle handler (replace the existing one at bottom of file)
+document.getElementById('theme-toggle').addEventListener('click', function() {
+  const themeStyle = document.getElementById('theme-style');
+  const isDark = themeStyle.href.includes('dark');
+  const newTheme = isDark ? 'light' : 'dark';
+  const themeIcon = this.querySelector('i');
+
+  // Update stylesheet
+  themeStyle.href = `style-${newTheme}.css`;
+  
+  // Update icon
+  if (newTheme === 'light') {
+    themeIcon.classList.replace('fa-sun', 'fa-moon');
+  } else {
+    themeIcon.classList.replace('fa-moon', 'fa-sun');
+  }
+  
+  // Save preference
+  localStorage.setItem('theme', newTheme);
+});
+
 document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.index ul li a.tab');
   const contentContainer = document.querySelector('.content');
@@ -127,18 +166,3 @@ function parseEmojis(text) {
   };
   return text.replace(/:\w+:/g, match => emojiMap[match] || match);
 }
-
-document.getElementById('theme-toggle').addEventListener('click', function() {
-  const currentTheme = document.querySelector('link[rel="stylesheet"]').getAttribute('href');
-  const themeIcon = this.querySelector('i');
-
-  if (currentTheme.includes('style-dark.css')) {
-    document.querySelector('link[rel="stylesheet"]').setAttribute('href', 'style-light.css');
-    themeIcon.classList.remove('fa-sun');
-    themeIcon.classList.add('fa-moon');
-  } else {
-    document.querySelector('link[rel="stylesheet"]').setAttribute('href', 'style-dark.css');
-    themeIcon.classList.remove('fa-moon');
-    themeIcon.classList.add('fa-sun');
-  }
-});
