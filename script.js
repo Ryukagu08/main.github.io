@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.index ul li a.tab');
   const contentContainer = document.querySelector('.content');
 
+  if (document.getElementById('repo-container')) {
+    loadRepos();
+  }
+
   navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
@@ -61,6 +65,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const doc = parser.parseFromString(html, "text/html");
             const newContent = doc.querySelector('.content');
             if (newContent && contentContainer) {
+              const currentTheme = document.getElementById('theme-style').href;
+              contentContainer.innerHTML = newContent.innerHTML;
+              document.getElementById('theme-style').href = currentTheme;
+
               contentContainer.innerHTML = newContent.innerHTML;
               contentContainer.classList.remove('fade-out');
               contentContainer.classList.add('fade-in');
@@ -79,6 +87,18 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = url;
           });
       }, 600); // Adjust this delay to match your fade-out duration
+
+      if (document.getElementById('repo-container')) {
+        loadRepos();
+      }
+    
+      // Existing fade-in code...
+      const content = document.querySelector('.content');
+      if (content) {
+        setTimeout(() => {
+          content.classList.add('fade-in');
+        }, 300);
+      }
     });
   });
 
