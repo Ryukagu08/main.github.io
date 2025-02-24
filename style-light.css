@@ -42,12 +42,6 @@ body, html {
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 25px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.logo-name img:hover {
-  transform: scale(1.03);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
 .logo-name h1 {
@@ -63,6 +57,39 @@ body, html {
 
 .index ul li {
   margin: 10px 0;
+}
+
+/* Home Button */
+
+.logo-link {
+  position: relative;
+  display: inline-block;
+}
+
+.home-icon {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5em;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.logo-link:hover .home-icon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.logo-link img {
+  position: relative;
+  transition: filter 0.3s ease;
+}
+
+.logo-link:hover img {
+  filter: brightness(0.1);
 }
 
 /* Navigation Button Styles */
