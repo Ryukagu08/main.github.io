@@ -78,18 +78,19 @@ body, html {
   pointer-events: none;
 }
 
-.logo-link:hover .home-icon {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
 .logo-link img {
   position: relative;
   transition: filter 0.3s ease;
 }
 
-.logo-link:hover img {
+.logo-link.hovered img {
   filter: brightness(0.1);
+  transform: scale(1.03);
+}
+
+.logo-link.hovered .home-icon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
 }
 
 /* Navigation Button Styles */

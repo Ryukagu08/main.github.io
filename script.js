@@ -1,4 +1,4 @@
-// Theme Preference
+// Apply saved theme preference on load
 (function applySavedTheme() {
   const savedTheme = localStorage.getItem('theme') || 'dark';
   const themeStyle = document.getElementById('theme-style');
@@ -7,7 +7,7 @@
 
   // Apply saved theme
   themeStyle.href = `style-${savedTheme}.css`;
-  
+
   // Set correct icon
   if (savedTheme === 'light') {
     themeIcon.classList.replace('fa-sun', 'fa-moon');
@@ -16,7 +16,7 @@
   }
 })();
 
-// Modified theme toggle handler (replace the existing one at bottom of file)
+// Theme toggle handler
 document.getElementById('theme-toggle').addEventListener('click', function() {
   const themeStyle = document.getElementById('theme-style');
   const isDark = themeStyle.href.includes('dark');
@@ -25,99 +25,81 @@ document.getElementById('theme-toggle').addEventListener('click', function() {
 
   // Update stylesheet
   themeStyle.href = `style-${newTheme}.css`;
-  
+
   // Update icon
-  if (newTheme === 'light') {
-    themeIcon.classList.replace('fa-sun', 'fa-moon');
-  } else {
-    themeIcon.classList.replace('fa-moon', 'fa-sun');
-  }
-  
+  themeIcon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
+
   // Save preference
   localStorage.setItem('theme', newTheme);
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  const navLinks = document.querySelectorAll('.index ul li a.tab');
+// Reusable AJAX navigation function
+function ajaxNavigate(url) {
   const contentContainer = document.querySelector('.content');
+  if (contentContainer) {
+    contentContainer.classList.remove('fade-in');
+    contentContainer.classList.add('fade-out');
+  }
+  setTimeout(() => {
+    fetch(url)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const newContent = doc.querySelector('.content');
+        if (newContent && contentContainer) {
+          // Preserve current theme stylesheet
+          const currentTheme = document.getElementById('theme-style').href;
+          contentContainer.innerHTML = newContent.innerHTML;
+          document.getElementById('theme-style').href = currentTheme;
+          contentContainer.classList.remove('fade-out');
+          contentContainer.classList.add('fade-in');
 
-  if (document.getElementById('repo-container')) {
-    loadRepos();
+          // Reapply any dynamic behavior (e.g., logo hover) if needed
+          setupLogoHover();
+
+          // Load repos if the new content has a repo container
+          if (document.getElementById('repo-container')) {
+            loadRepos();
+          }
+        }
+        history.pushState(null, '', url);
+      })
+      .catch(err => {
+        console.error('Error loading page:', err);
+        window.location.href = url;
+      });
+  }, 600); // Delay matching fade-out duration
+}
+
+// Attach AJAX navigation to both nav links and the logo link
+document.addEventListener('DOMContentLoaded', function() {
+  const links = document.querySelectorAll('.index ul li a.tab, .logo-link');
+  const content = document.querySelector('.content');
+
+  // Initial fade-in for main content on load
+  if (content) {
+    setTimeout(() => content.classList.add('fade-in'), 300);
   }
 
-  navLinks.forEach(link => {
+  links.forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
       const url = this.getAttribute('href');
-
-      // Fade out the current content
-      if (contentContainer) {
-        contentContainer.classList.remove('fade-in');
-        contentContainer.classList.add('fade-out');
-      }
-
-      // After the fade-out, load new content via AJAX
-      setTimeout(() => {
-        fetch(url)
-          .then(response => response.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, "text/html");
-            const newContent = doc.querySelector('.content');
-            if (newContent && contentContainer) {
-              const currentTheme = document.getElementById('theme-style').href;
-              contentContainer.innerHTML = newContent.innerHTML;
-              document.getElementById('theme-style').href = currentTheme;
-
-              contentContainer.innerHTML = newContent.innerHTML;
-              contentContainer.classList.remove('fade-out');
-              contentContainer.classList.add('fade-in');
-
-              // If the new content includes a repo container, load the repos
-              if (document.getElementById('repo-container')) {
-                loadRepos();
-              }
-            }
-            // Update the browser's URL
-            history.pushState(null, '', url);
-          })
-          .catch(err => {
-            console.error('Error loading page:', err);
-            // Fallback to a full navigation on error
-            window.location.href = url;
-          });
-      }, 600); // Adjust this delay to match your fade-out duration
-
-      if (document.getElementById('repo-container')) {
-        loadRepos();
-      }
-    
-      // Existing fade-in code...
-      const content = document.querySelector('.content');
-      if (content) {
-        setTimeout(() => {
-          content.classList.add('fade-in');
-        }, 300);
-      }
+      ajaxNavigate(url);
     });
   });
 
-  // On initial page load, fade in the content
-  const content = document.querySelector('.content');
-  if (content) {
-    setTimeout(() => {
-      content.classList.add('fade-in');
-    }, 300);
+  // If on a page with repos, load them
+  if (document.getElementById('repo-container')) {
+    loadRepos();
   }
 });
 
 // Function to load GitHub repositories into #repo-container
 function loadRepos() {
   const username = 'Ryukagu08';
-  // If left empty (i.e., []), it will display all repos.
-  const desiredRepos = []; // Repo names
-
-  // Mapping of programming languages to colors.
+  const desiredRepos = []; // Leave empty for all repos
   const languageColors = {
     'JavaScript': '#f1e05a',
     'Python': '#3572A5',
@@ -135,7 +117,6 @@ function loadRepos() {
     'Rust': '#dea584'
   };
 
-  // Helper function to get the language color or a default
   function getLanguageColor(language) {
     return languageColors[language] || '#ccc';
   }
@@ -153,12 +134,11 @@ function loadRepos() {
         console.error("Error: #repo-container not found in the DOM.");
         return;
       }
-      repoContainer.innerHTML = ''; // Clear any existing content
+      repoContainer.innerHTML = ''; // Clear previous repos
       repos.forEach(repo => {
         const card = document.createElement('div');
         card.className = 'repo-card';
         const description = repo.description ? parseEmojis(repo.description) : "No description provided.";
-        // Create languageHTML only if a language is provided.
         const languageHTML = repo.language ? `
           <p>
             <span class="language-dot" style="background-color: ${getLanguageColor(repo.language)};"></span>
@@ -176,13 +156,12 @@ function loadRepos() {
     .catch(error => console.error('Error fetching repos:', error));
 }
 
-// Github Emoji
+// Github Emoji parser
 function parseEmojis(text) {
   const emojiMap = {
     ':zap:': '⚡',
     ':smile:': '😄',
     ':rocket:': '🚀'
-    // add more mappings as needed
   };
   return text.replace(/:\w+:/g, match => emojiMap[match] || match);
 }
