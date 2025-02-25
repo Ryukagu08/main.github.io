@@ -4,7 +4,7 @@ body, html {
   padding: 0;
   font-family: Arial, sans-serif;
   height: 100%;
-  background: #f0f0f0; /* Light background */
+  background: linear-gradient(to bottom, #f9f9f9, #eaeaea);
   color: #333; /* Dark text for contrast */
 }
 
@@ -16,7 +16,7 @@ body, html {
 /* Sidebar Styles */
 .sidebar {
   width: 250px;
-  background: #ffffff; /* White sidebar */
+  background: linear-gradient(135deg, #ffffff, #f7f7f7);
   color: #333;
   padding: 40px 20px 20px;
   display: flex;
