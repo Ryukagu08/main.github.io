@@ -63,7 +63,14 @@ body, html {
 
 .logo-link {
   position: relative;
-  display: inline-block;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.logo-link img {
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .home-icon {
@@ -74,21 +81,17 @@ body, html {
   font-size: 2.5em;
   color: rgba(255, 255, 255, 0.7);
   opacity: 0;
+  z-index: 2;
   transition: opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
 }
 
-.logo-link img {
-  position: relative;
-  transition: filter 0.3s ease;
-}
-
-.logo-link.hovered img {
+.logo-link:hover img {
   filter: brightness(0.1);
   transform: scale(1.03);
 }
 
-.logo-link.hovered .home-icon {
+.logo-link:hover .home-icon {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1.1);
 }
