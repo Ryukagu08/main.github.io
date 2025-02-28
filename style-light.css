@@ -28,6 +28,7 @@ body, html {
 .container {
   display: flex;
   height: 100vh;
+  overflow: visible;
 }
 
 /* Sidebar Styles */
@@ -40,25 +41,18 @@ body, html {
   flex-direction: column;
   align-items: stretch;
   font-weight: 500;
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
   transition: var(--transition);
   position: relative;
+  z-index: 2; /* raise stacking order */
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
 }
 
-/* Add a subtle accent line to sidebar */
-.sidebar:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
-  opacity: 0.8;
-}
+
+
 
 .sidebar:hover {
-  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.4);
+  z-index: 3;
 }
 
 .logo-name {
@@ -481,13 +475,14 @@ body, html {
   display: flex;
   flex-direction: column;
   gap: 30px;
+  color: var(--text-dark) !important;
 }
 
 .skill-category h4 {
   margin-bottom: 15px;
   font-weight: 600;
-  color: var(--text-dark);
-  border-bottom: 1px solid var(--border-color);
+  color: var(--text-dark) !important;
+  border-bottom: 1px solid var(--secondary-color) !important;
   padding-bottom: 10px;
 }
 
@@ -506,7 +501,7 @@ body, html {
 .skill-tag {
   background: rgba(10, 132, 255, 0.05);
   border: 1px solid rgba(10, 132, 255, 0.2);
-  color: var(--text-dark);
+  color: var(--text-dark) !important;
   border-radius: 30px;
   padding: 6px 14px;
   font-size: 0.9em;
