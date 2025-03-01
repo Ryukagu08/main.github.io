@@ -834,48 +834,70 @@ body, html {
   }
 }
 
-/* Media queries for responsiveness */
 @media screen and (max-width: 768px) {
   .container {
     flex-direction: column;
   }
   
+  /* Convert sidebar into a top navigation bar */
   .sidebar {
     width: 100%;
-    padding: 20px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  /* Logo and title */
+  .logo-name {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .logo-name img {
+    max-width: 40px;         /* reduced logo size */
+    margin-bottom: 0;
+  }
+  
+  .logo-name h1 {
+    font-size: 1.5em;        /* reduced title size */
+    margin-left: 10px;
+  }
+  
+  /* Display navigation links as a horizontal list */
+  .index {
+    display: flex;
+    align-items: center;
+  }
+  
+  .index ul {
+    display: flex;
+    gap: 15px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .index ul li a.tab {
+    padding: 5px 10px;
+    font-size: 1em;
+    background: transparent;
+  }
+  
+  /* Adjust theme toggle button for a cleaner look */
+  #theme-toggle {
+    margin-left: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.5em;
+    padding: 5px;
+    cursor: pointer;
   }
   
   .content {
     padding: 20px;
-  }
-  
-  #home h2 {
-    font-size: 2.2em;
-  }
-  
-  .home-actions {
-    flex-direction: column;
-  }
-  
-  .quick-stats {
-    justify-content: space-between;
-  }
-  
-  .contact-methods {
-    flex-direction: column;
-  }
-  
-  .contact-form {
-    grid-template-columns: 1fr;
-  }
-  
-  .form-group:nth-child(3),
-  .form-group:nth-child(4),
-  .submit-button {
-    grid-column: span 1;
-  }
-  
-  .projects-grid {
-    grid-template-columns: 1fr;
   }
 }

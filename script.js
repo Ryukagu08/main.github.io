@@ -16,6 +16,44 @@
   }
 })();
 
+document.addEventListener("DOMContentLoaded", function() {
+  const logoName = document.querySelector('.logo-name');
+  const themeToggle = document.querySelector('#theme-toggle');
+  const sidebar = document.querySelector('.sidebar');
+
+  // Create a placeholder to mark the theme toggle's original position in the sidebar
+  const togglePlaceholder = document.createElement('div');
+  // Optionally, give it an ID for debugging or future use
+  togglePlaceholder.id = "toggle-placeholder";
+  
+  // Insert the placeholder immediately before the theme toggle
+  if (themeToggle.parentNode) {
+    themeToggle.parentNode.insertBefore(togglePlaceholder, themeToggle);
+  }
+
+  // Function to reposition the theme toggle based on the viewport width
+  function adjustThemeToggle() {
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      // On mobile: move the toggle inside the logo-name container, if not already there
+      if (!logoName.contains(themeToggle)) {
+        logoName.appendChild(themeToggle);
+      }
+    } else {
+      // On desktop: move the toggle back to its original location using the placeholder
+      if (togglePlaceholder.parentNode) {
+        togglePlaceholder.parentNode.insertBefore(themeToggle, togglePlaceholder);
+      }
+    }
+  }
+
+  // Run on page load
+  adjustThemeToggle();
+
+  // Re-run when the window is resized
+  window.addEventListener("resize", adjustThemeToggle);
+});
+
+
 // Theme toggle handler with improved animation
 document.getElementById('theme-toggle').addEventListener('click', function() {
   const themeStyle = document.getElementById('theme-style');
