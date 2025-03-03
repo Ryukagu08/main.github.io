@@ -16,30 +16,89 @@
   }
 })();
 
-// Theme toggle handler
+document.addEventListener("DOMContentLoaded", function() {
+  const logoName = document.querySelector('.logo-name');
+  const themeToggle = document.querySelector('#theme-toggle');
+  const sidebar = document.querySelector('.sidebar');
+
+  // Create a placeholder to mark the theme toggle's original position in the sidebar
+  const togglePlaceholder = document.createElement('div');
+  // Optionally, give it an ID for debugging or future use
+  togglePlaceholder.id = "toggle-placeholder";
+  
+  // Insert the placeholder immediately before the theme toggle
+  if (themeToggle.parentNode) {
+    themeToggle.parentNode.insertBefore(togglePlaceholder, themeToggle);
+  }
+
+  // Function to reposition the theme toggle based on the viewport width
+  function adjustThemeToggle() {
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      // On mobile: move the toggle inside the logo-name container, if not already there
+      if (!logoName.contains(themeToggle)) {
+        logoName.appendChild(themeToggle);
+      }
+    } else {
+      // On desktop: move the toggle back to its original location using the placeholder
+      if (togglePlaceholder.parentNode) {
+        togglePlaceholder.parentNode.insertBefore(themeToggle, togglePlaceholder);
+      }
+    }
+  }
+
+  // Run on page load
+  adjustThemeToggle();
+
+  // Re-run when the window is resized
+  window.addEventListener("resize", adjustThemeToggle);
+});
+
+
+// Theme toggle handler with improved animation
 document.getElementById('theme-toggle').addEventListener('click', function() {
   const themeStyle = document.getElementById('theme-style');
   const isDark = themeStyle.href.includes('dark');
   const newTheme = isDark ? 'light' : 'dark';
   const themeIcon = this.querySelector('i');
-
-  // Update stylesheet
-  themeStyle.href = `style-${newTheme}.css`;
-
-  // Update icon
-  themeIcon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
-
-  // Save preference
-  localStorage.setItem('theme', newTheme);
+  
+  // Add transition overlay
+  const overlay = document.getElementById('transition-overlay');
+  overlay.style.width = '100%';
+  
+  // Update stylesheet and icon after a slight delay
+  setTimeout(() => {
+    // Update stylesheet
+    themeStyle.href = `style-${newTheme}.css`;
+    
+    // Update icon with rotation animation
+    themeIcon.style.transform = 'rotate(180deg)';
+    setTimeout(() => {
+      themeIcon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
+      themeIcon.style.transform = 'rotate(0deg)';
+    }, 300);
+    
+    // Hide overlay
+    setTimeout(() => {
+      overlay.style.width = '0';
+    }, 300);
+    
+    // Save preference
+    localStorage.setItem('theme', newTheme);
+  }, 300);
 });
 
-// Reusable AJAX navigation function
+// Improved AJAX navigation function with smoother transitions
 function ajaxNavigate(url) {
   const contentContainer = document.querySelector('.content');
   if (contentContainer) {
     contentContainer.classList.remove('fade-in');
     contentContainer.classList.add('fade-out');
   }
+  
+  // Add transition overlay for smoother page transitions
+  const overlay = document.getElementById('transition-overlay');
+  overlay.style.width = '100%';
+  
   setTimeout(() => {
     fetch(url)
       .then(response => response.text())
@@ -53,15 +112,31 @@ function ajaxNavigate(url) {
           contentContainer.innerHTML = newContent.innerHTML;
           document.getElementById('theme-style').href = currentTheme;
           contentContainer.classList.remove('fade-out');
+          
+          // Add animation classes to main elements
+          const headings = contentContainer.querySelectorAll('h2, h3');
+          headings.forEach((el, index) => {
+            el.style.animationDelay = `${0.1 + (index * 0.1)}s`;
+            el.classList.add('animate-slide-up');
+          });
+          
+          const paragraphs = contentContainer.querySelectorAll('p');
+          paragraphs.forEach((el, index) => {
+            el.style.animationDelay = `${0.2 + (index * 0.1)}s`;
+            el.classList.add('animate-fade-in');
+          });
+          
           contentContainer.classList.add('fade-in');
-
-          // Reapply any dynamic behavior (e.g., logo hover) if needed
-          setupLogoHover();
 
           // Load repos if the new content has a repo container
           if (document.getElementById('repo-container')) {
             loadRepos();
           }
+          
+          // Hide overlay after content is loaded
+          setTimeout(() => {
+            overlay.style.width = '0';
+          }, 300);
         }
         history.pushState(null, '', url);
       })
@@ -79,7 +154,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initial fade-in for main content on load
   if (content) {
-    setTimeout(() => content.classList.add('fade-in'), 300);
+    // Add animation classes to main elements on page load
+    const headings = content.querySelectorAll('h2, h3');
+    headings.forEach((el, index) => {
+      el.style.animationDelay = `${0.3 + (index * 0.1)}s`;
+      el.classList.add('animate-slide-up');
+    });
+    
+    const paragraphs = content.querySelectorAll('p');
+    paragraphs.forEach((el, index) => {
+      el.style.animationDelay = `${0.4 + (index * 0.1)}s`;
+      el.classList.add('animate-fade-in');
+    });
+    
+    setTimeout(() => content.classList.add('fade-in'), 100);
   }
 
   links.forEach(link => {
@@ -96,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Function to load GitHub repositories into #repo-container
+// Enhanced function to load GitHub repositories into #repo-container
 function loadRepos() {
   const username = 'Ryukagu08';
   const desiredRepos = []; // Leave empty for all repos
@@ -120,31 +208,45 @@ function loadRepos() {
   function getLanguageColor(language) {
     return languageColors[language] || '#ccc';
   }
+  
+  // Loading indicator
+  const repoContainer = document.getElementById('repo-container');
+  if (repoContainer) {
+    repoContainer.innerHTML = '<div class="loading-indicator"><i class="fas fa-circle-notch fa-spin"></i> Loading projects...</div>';
+  } else {
+    console.error("Error: #repo-container not found in the DOM.");
+    return;
+  }
 
   fetch(`https://api.github.com/users/${username}/repos?sort=updated&direction=desc`)
     .then(response => response.json())
     .then(repos => {
       console.log("Fetched Repositories:", repos);
       if (!repos.length) {
-        console.warn("No repositories found. Check API response.");
+        repoContainer.innerHTML = '<p>No repositories found. Check back soon for new projects!</p>';
         return;
       }
-      const repoContainer = document.getElementById('repo-container');
-      if (!repoContainer) {
-        console.error("Error: #repo-container not found in the DOM.");
-        return;
-      }
-      repoContainer.innerHTML = ''; // Clear previous repos
-      repos.forEach(repo => {
+      
+      repoContainer.innerHTML = ''; // Clear loading indicator
+      
+      repos.forEach((repo, index) => {
         const card = document.createElement('div');
         card.className = 'repo-card';
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('animate-in');
+        
         const description = repo.description ? parseEmojis(repo.description) : "No description provided.";
+  
+        
         const languageHTML = repo.language ? `
-          <p>
-            <span class="language-dot" style="background-color: ${getLanguageColor(repo.language)};"></span>
-            ${repo.language}
-          </p>
+          <div class="repo-meta">
+            <span class="repo-language">
+              <span class="language-dot" style="background-color: ${getLanguageColor(repo.language)};"></span>
+              ${repo.language}
+            </span>
+          </div>
         ` : '';
+        
         card.innerHTML = `
           <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
           <p>${description}</p>
@@ -153,7 +255,10 @@ function loadRepos() {
         repoContainer.appendChild(card);
       });
     })
-    .catch(error => console.error('Error fetching repos:', error));
+    .catch(error => {
+      console.error('Error fetching repos:', error);
+      repoContainer.innerHTML = '<p>Error loading projects. Please refresh the page to try again.</p>';
+    });
 }
 
 // Github Emoji parser
@@ -161,7 +266,16 @@ function parseEmojis(text) {
   const emojiMap = {
     ':zap:': '⚡',
     ':smile:': '😄',
-    ':rocket:': '🚀'
+    ':rocket:': '🚀',
+    ':star:': '⭐',
+    ':fire:': '🔥',
+    ':tada:': '🎉',
+    ':heart:': '❤️',
+    ':warning:': '⚠️',
+    ':bug:': '🐛',
+    ':books:': '📚',
+    ':wrench:': '🔧',
+    ':bulb:': '💡'
   };
   return text.replace(/:\w+:/g, match => emojiMap[match] || match);
 }
