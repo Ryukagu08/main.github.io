@@ -1,0 +1,190 @@
+/* 
+ * responsive.css - Media queries and responsive adjustments
+ */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (max-width: 576px) {
+  :root {
+    --container-padding: var(--space-3);
+  }
+  
+  .content-container {
+    padding: var(--space-6) var(--space-4);
+  }
+  
+  h2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .home-actions {
+    flex-direction: column;
+  }
+  
+  .contact-methods {
+    flex-direction: column;
+  }
+}
+
+/* Medium devices (tablets, 768px and below) */
+@media (max-width: 768px) {
+  /* Convert the layout for mobile */
+  .app-container {
+    flex-direction: column;
+  }
+  
+  /* Sidebar as top navbar */
+  .sidebar {
+    width: 100%;
+    height: var(--sidebar-mobile-height);
+    padding: var(--space-2) var(--space-4);
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  
+  .sidebar::before {
+    width: 100%;
+    height: 3px;
+    top: auto;
+    bottom: 0;
+  }
+  
+  /* Logo and title for mobile */
+  .logo-name {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .logo-name img {
+    max-width: 40px;
+    margin-bottom: 0;
+    margin-right: var(--space-3);
+  }
+  
+  .logo-name h1 {
+    font-size: var(--font-size-xl);
+  }
+  
+  /* Theme toggle for mobile */
+  #theme-toggle {
+    margin: 0 0 0 var(--space-3);
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* Navigation for mobile */
+  .main-nav {
+    display: flex;
+    align-items: center;
+  }
+  
+  .main-nav ul {
+    display: flex;
+    gap: var(--space-3);
+    margin: 0;
+  }
+  
+  .main-nav ul li {
+    margin: 0;
+  }
+  
+  .main-nav ul li a.nav-link {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-base);
+  }
+  
+  .main-nav ul li a.nav-link:hover {
+    transform: none;
+  }
+  
+  /* Adjust content area for fixed header */
+  .content-container {
+    margin-left: 0;
+    width: 100%;
+    padding-top: calc(var(--sidebar-mobile-height) + var(--space-6));
+  }
+  
+  /* Projects grid for smaller screens */
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  /* Skills list on smaller screens */
+  .skills-list {
+    gap: var(--space-2);
+  }
+  
+  /* Adjust quick stats for smaller screens */
+  .quick-stats {
+    justify-content: space-between;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .content-container {
+    padding: var(--space-8) var(--space-8);
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .content-container {
+    padding: var(--space-10) var(--space-16);
+  }
+  
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+/* Handle tall screens */
+@media (min-height: 800px) {
+  .content-container {
+    padding-bottom: var(--space-20);
+  }
+}
+
+/* Handle short screens */
+@media (max-height: 600px) {
+  .logo-name {
+    margin-bottom: var(--space-4);
+  }
+  
+  .logo-name img {
+    max-width: 100px;
+    margin-bottom: var(--space-3);
+  }
+}
+
+/* Print styles */
+@media print {
+  .sidebar {
+    display: none;
+  }
+  
+  .content-container {
+    margin-left: 0;
+    width: 100%;
+    padding: 0;
+  }
+  
+  #transition-overlay {
+    display: none;
+  }
+  
+  .card, .about-card, .contact-card, .repo-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .page-content {
+    display: block;
+    opacity: 1;
+    transform: none;
+  }
+}

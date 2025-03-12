@@ -1,0 +1,289 @@
+/* 
+ * light-theme.css - Light theme color variables and overrides
+ */
+
+:root {
+  /* Color Palette */
+  --color-bg-primary: #f8f9fa;
+  --color-bg-secondary: #ffffff;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: rgba(10, 132, 255, 0.05);
+  
+  --color-text-primary: #242938;
+  --color-text-secondary: #373f51;
+  --color-text-muted: #5a6072;
+  
+  --color-accent-primary: #0a84ff;
+  --color-accent-secondary: #0081d1;
+  --color-gradient: linear-gradient(90deg, #0a84ff, #0081d1);
+  
+  --color-border: #e6e8f0;
+  
+  /* Component-specific colors */
+  --color-shadow: rgba(0, 0, 0, 0.05);
+  --color-shadow-hover: rgba(0, 0, 0, 0.1);
+  
+  --color-card-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  --color-card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.1);
+  
+  --color-skill-tag-bg: rgba(10, 132, 255, 0.05);
+  --color-skill-tag-border: rgba(10, 132, 255, 0.2);
+  
+  /* Transition overlay color */
+  --color-overlay-bg: #f8f9fa;
+  
+  /* Scrollbar colors */
+  --color-scrollbar-track: rgba(10, 132, 255, 0.05);
+  --color-scrollbar-thumb: rgba(10, 132, 255, 0.2);
+  --color-scrollbar-thumb-hover: rgba(10, 132, 255, 0.3);
+}
+
+/* Base Elements */
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  box-shadow: 2px 0 20px var(--color-shadow);
+}
+
+.sidebar:hover {
+  box-shadow: 4px 0 25px var(--color-shadow-hover);
+}
+
+.sidebar::before {
+  background: var(--color-gradient);
+}
+
+/* Logo and Name */
+.logo-name img {
+  box-shadow: 0 8px 20px var(--color-shadow);
+  border-color: rgba(10, 132, 255, 0.1);
+}
+
+.logo-name h1 {
+  background-image: var(--color-gradient);
+}
+
+.home-icon {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Navigation */
+.main-nav ul li a.nav-link {
+  color: var(--color-text-primary);
+}
+
+.main-nav ul li a.nav-link:hover {
+  background-color: var(--color-bg-hover);
+  border-left-color: var(--color-accent-primary);
+}
+
+.main-nav ul li a.nav-link::after {
+  background: transparent;
+}
+
+.main-nav ul li a.nav-link:hover::after {
+  background: rgba(10, 132, 255, 0.1);
+}
+
+/* Theme Toggle */
+#theme-toggle {
+  color: var(--color-text-primary);
+}
+
+#theme-toggle:hover {
+  color: var(--color-accent-primary);
+  background: var(--color-bg-hover);
+}
+
+/* Content Area */
+.content-container {
+  background-color: var(--color-bg-primary);
+}
+
+/* Headings */
+h2 {
+  color: var(--color-text-primary);
+}
+
+h2::after {
+  background: var(--color-gradient);
+}
+
+h3 {
+  color: var(--color-accent-primary);
+}
+
+h4 {
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-border);
+}
+
+/* Paragraphs */
+p {
+  color: var(--color-text-secondary);
+}
+
+/* Transition Overlay */
+#transition-overlay {
+  background-color: var(--color-overlay-bg);
+  box-shadow: -4px 0 15px var(--color-shadow);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-thumb-hover);
+}
+
+/* Buttons */
+.primary-button {
+  background: var(--color-gradient);
+  color: white;
+  box-shadow: 0 8px 15px rgba(10, 132, 255, 0.2);
+}
+
+.primary-button:hover {
+  box-shadow: 0 12px 20px rgba(10, 132, 255, 0.3);
+}
+
+.secondary-button {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+  border-color: var(--color-skill-tag-border);
+}
+
+.secondary-button:hover {
+  background: rgba(10, 132, 255, 0.1);
+}
+
+/* Cards */
+.card, .about-card, .contact-card, .repo-card {
+  background-color: var(--color-bg-card);
+  box-shadow: var(--color-card-shadow);
+  border: 1px solid var(--color-border);
+}
+
+.card:hover, .about-card:hover, .contact-card:hover, .repo-card:hover {
+  box-shadow: var(--color-card-shadow-hover);
+}
+
+.repo-card::before {
+  background: var(--color-gradient);
+}
+
+.repo-card h3 a {
+  color: var(--color-text-primary);
+}
+
+.repo-card h3 a:hover {
+  color: var(--color-accent-primary);
+}
+
+/* Skills */
+.skill-tag {
+  background-color: var(--color-skill-tag-bg);
+  border-color: var(--color-skill-tag-border);
+  color: var(--color-text-primary);
+}
+
+.skill-tag:hover {
+  background-color: rgba(10, 132, 255, 0.1);
+}
+
+.skill-tag i {
+  color: var(--color-accent-primary);
+}
+
+/* About Section */
+.about-intro {
+  border-left-color: var(--color-accent-primary);
+  color: var(--color-text-muted);
+}
+
+/* Subtle text */
+.subtle {
+  color: var(--color-text-muted);
+}
+
+/* Contact Section */
+.contact-icon {
+  color: var(--color-accent-primary);
+  background-color: rgba(10, 132, 255, 0.05);
+}
+
+.contact-label {
+  color: var(--color-text-muted);
+}
+
+.contact-value a {
+  color: var(--color-text-primary);
+}
+
+.contact-value a:hover {
+  color: var(--color-accent-primary);
+}
+
+/* Home Section */
+#home::before {
+  background: radial-gradient(circle at 10% 20%, rgba(10, 132, 255, 0.05) 0%, rgba(10, 132, 255, 0.02) 90%);
+}
+
+/* Stats */
+.stat-number {
+  color: var(--color-accent-primary);
+}
+
+.stat-label {
+  color: var(--color-text-muted);
+}
+
+/* Projects Section */
+.projects-intro {
+  color: var(--color-text-muted);
+}
+
+.project-type {
+  background-color: rgba(10, 132, 255, 0.05);
+  color: var(--color-accent-primary);
+}
+
+/* Loading indicator */
+.loading-indicator {
+  color: var(--color-text-muted);
+}
+
+.loading-indicator i {
+  color: var(--color-accent-primary);
+}
+
+/* Filter buttons */
+.filter-btn {
+  background-color: rgba(10, 132, 255, 0.05);
+  border-color: rgba(10, 132, 255, 0.1);
+  color: var(--color-text-primary);
+}
+
+.filter-btn:hover {
+  background-color: rgba(10, 132, 255, 0.1);
+  border-color: rgba(10, 132, 255, 0.3);
+}
+
+.filter-btn.active {
+  background: var(--color-gradient);
+  border-color: transparent;
+  box-shadow: 0 5px 15px rgba(10, 132, 255, 0.2);
+  color: white;
+}

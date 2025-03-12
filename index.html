@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Ryu's Portfolio</title>
+  
+  <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicon/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="/assets/favicon/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="/assets/favicon/apple-icon-72x72.png">
@@ -10,7 +15,7 @@
   <link rel="apple-touch-icon" sizes="144x144" href="/assets/favicon/apple-icon-144x144.png">
   <link rel="apple-touch-icon" sizes="152x152" href="/assets/favicon/apple-icon-152x152.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-icon-180x180.png">
-  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/favicon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon/android-icon-192x192.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
@@ -18,46 +23,62 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="/assets/favicon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Home - Ryu's Portfolio</title>
-  <link id="theme-style" rel="stylesheet" href="style-dark.css">
-  <link rel="stylesheet" href="additional-styles.css">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link id="theme-style" rel="stylesheet" href="css/dark-theme.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  
+  <!-- Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
+  <div class="app-container">
+    <!-- Fixed Sidebar -->
     <aside class="sidebar">
       <div class="logo-name">
-        <a href="index.html" class="logo-link">
-          <img src="assets/LogoSilverBlack.png" alt="Your Logo" />
+        <a href="#home" class="logo-link" data-page="home">
+          <img src="assets/LogoSilverBlack.png" alt="Ryu Logo">
           <i class="fas fa-home home-icon"></i>
         </a>
         <h1>Ryu</h1>
       </div>
-      <nav class="index">
+      
+      <nav class="main-nav">
         <ul>
-          <li><a class="tab" href="about.html"><span>About</span></a></li>
-          <li><a class="tab" href="projects.html"><span>Projects</span></a></li>
-          <li><a class="tab" href="contact.html"><span>Contact</span></a></li>
+          <li><a class="nav-link" href="#about" data-page="about"><span>About</span></a></li>
+          <li><a class="nav-link" href="#projects" data-page="projects"><span>Projects</span></a></li>
+          <li><a class="nav-link" href="#contact" data-page="contact"><span>Contact</span></a></li>
         </ul>
       </nav>
+      
       <button id="theme-toggle" aria-label="Toggle Theme">
         <i class="fas fa-sun"></i>
       </button>
     </aside>
-    <main class="content">
-      <section id="home">
+
+    <!-- Main Content Area -->
+    <main class="content-container">
+      <!-- Transition Overlay -->
+      <div id="transition-overlay"></div>
+      
+      <!-- Home Page -->
+      <section id="home" class="page-content active">
         <h2>Welcome to My Portfolio</h2>
         <p>Hello, I'm <strong>Ryu</strong> — a passionate full-stack and game developer on the making, focused on user-centered digital experiences.</p>
         <p>Explore my work and discover my journey through building meaningful projects.</p>
+        
         <div class="home-actions">
-          <a href="projects.html" class="primary-button">View Projects <i class="fas fa-arrow-right"></i></a>
+          <a href="#projects" class="primary-button" data-page="projects">View Projects <i class="fas fa-arrow-right"></i></a>
         </div>
         
-        <!-- Quick stats section -->
-        <!-- <div class="quick-stats">
+        <!-- Quick stats section - Uncomment when you have real stats
+        <div class="quick-stats">
           <div class="stat-item">
             <span class="stat-number">5+</span>
             <span class="stat-label">Years Experience</span>
@@ -70,11 +91,115 @@
             <span class="stat-number">15+</span>
             <span class="stat-label">Happy Clients</span>
           </div>
-        </div> -->
+        </div>
+        -->
+      </section>
+      
+      <!-- About Page -->
+      <section id="about" class="page-content">
+        <h2>About Me</h2>
+        
+        <div class="about-content">
+          <p class="about-intro">Studying to become a full-stack and game developer with a passion for creating visually appealing designs that combine powerful functionality with intuitive user experiences.</p>
+          
+          <div class="about-card">
+            <h3><i class="fas fa-user-circle"></i> Who I Am</h3>
+            <p>A creative problem-solver who thrives on turning complex challenges into elegant solutions. I approach each project with enthusiasm, attention to detail, and a commitment to excellence.</p>
+          </div>
+          
+          <h3>Skills & Expertise 🛠️</h3>
+          <div class="skills-container">
+            <div class="skill-category">
+              <h4><i class="fas fa-code"></i> Frontend Development</h4>
+              <div class="skills-list">
+                <span class="skill-tag"><i class="fab fa-html5"></i> HTML5</span>
+                <span class="skill-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
+                <span class="skill-tag"><i class="fab fa-js"></i> JavaScript</span>
+              </div>
+            </div>
+            
+            <div class="skill-category">
+              <h4><i class="fas fa-server"></i> Backend Development (Currently Learning)</h4>
+              <div class="skills-list">
+                <span class="skill-tag"><i class="fab fa-node-js"></i> Node.js</span>
+                <span class="skill-tag"><i class="fab fa-python"></i> Python</span>
+              </div>
+            </div>
+            
+            <div class="skill-category">
+              <h4><i class="fas fa-tools"></i> Tools &amp; Technologies</h4>
+              <div class="skills-list">
+                <span class="skill-tag"><i class="fab fa-git-alt"></i> Git</span>
+                <span class="skill-tag"><i class="fab fa-docker"></i> Docker</span>
+                <span class="skill-tag"><i class="fab fa-aws"></i> Self Hosting</span>
+                <span class="skill-tag"><i class="fas fa-mobile-alt"></i> Responsive Design</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="about-card">
+            <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+            <p><strong>Microcomputer Systems and Networks Technician</strong> — IES Leonardo de Chabacier</p>
+            <p class="subtle">Still in progress.</p>
+          </div>
+          
+          <div class="about-card">
+            <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+            <p>Still in progress</p>
+            <!-- Work experience content will go here when available -->
+          </div>
+        </div>
+      </section>
+      
+      <!-- Projects Page -->
+      <section id="projects" class="page-content">
+        <h2>Featured Projects</h2>
+        <p class="projects-intro">Here are some of my recent projects.</p>
+        
+        <!-- Projects grid - dynamically populated from GitHub -->
+        <div id="repo-container" class="projects-grid"></div>
+      </section>
+      
+      <!-- Contact Page -->
+      <section id="contact" class="page-content">
+        <h2>Get In Touch</h2>
+        <p>Have a project in mind or want to collaborate? Feel free to reach out through any of these channels:</p>
+        
+        <div class="contact-methods">
+          <!-- Email Card -->
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-value">
+                <a href="mailto:ryu.businesscontact@gmail.com">ryu.businesscontact@gmail.com</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- GitHub Card -->
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fab fa-github"></i>
+            </div>
+            <div>
+              <div class="contact-label">GitHub</div>
+              <div class="contact-value">
+                <a href="https://github.com/Ryukagu08" target="_blank">Ryukagu08</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   </div>
-  <div id="transition-overlay"></div>
-  <script src="script.js"></script>
+
+  <!-- JavaScript -->
+  <script src="js/navigation.js"></script>
+  <script src="js/theme-manager.js"></script>
+  <script src="js/github-api.js"></script>
+  <script src="js/animations.js"></script>
 </body>
 </html>
