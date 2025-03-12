@@ -162,7 +162,6 @@ html, body {
   font-size: 1.5em;
   cursor: pointer;
   margin-top: auto;
-  align-self: center;
   padding: var(--space-3);
   transition: all var(--transition-normal);
   width: 50px;

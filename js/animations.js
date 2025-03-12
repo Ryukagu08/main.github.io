@@ -1,4 +1,36 @@
 /**
+ * Set up cursor glow effect for navigation elements
+ */
+function setupCursorGlowEffect() {
+  // Target only navigation buttons (excluding home/logo)
+  const navLinks = document.querySelectorAll('.main-nav .nav-link');
+  
+  // Add the glow effect to each navigation link
+  navLinks.forEach(navLink => {
+    // Create a glow element for each nav link
+    const glowElement = document.createElement('div');
+    glowElement.className = 'nav-glow';
+    navLink.appendChild(glowElement);
+    
+    // Track mouse position within the navigation button
+    navLink.addEventListener('mousemove', (e) => {
+      const rect = navLink.getBoundingClientRect();
+      // Calculate position relative to the button
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Update glow position
+      glowElement.style.left = `${x}px`;
+      glowElement.style.top = `${y}px`;
+      glowElement.classList.add('active');
+    });
+    
+    // Remove glow when mouse leaves
+    navLink.addEventListener('mouseleave', () => {
+      glowElement.classList.remove('active');
+    });
+  });
+}/**
  * animations.js - Handles UI animations and transitions
  */
 
@@ -8,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Set up any animation-related event listeners
   setupAnimationTriggers();
+  
+  // Set up cursor glow effect
+  setupCursorGlowEffect();
 });
 
 /**
