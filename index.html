@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="Ryu's portfolio - Full-stack and game developer showcasing creative projects and technical skills">
   <title>Ryu's Portfolio</title>
   
   <!-- Favicon -->
@@ -39,6 +40,9 @@
 </head>
 <body>
   <div class="app-container">
+    <!-- Mobile menu overlay -->
+    <div class="mobile-overlay"></div>
+    
     <!-- Fixed Sidebar -->
     <aside class="sidebar">
       <div class="logo-name">
@@ -49,16 +53,26 @@
         <h1>Ryu</h1>
       </div>
       
+      <!-- Mobile menu toggle button -->
+      <button id="mobile-menu-toggle" aria-label="Toggle Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      
       <nav class="main-nav">
         <ul>
           <li><a class="nav-link" href="#about" data-page="about"><span>About</span></a></li>
           <li><a class="nav-link" href="#projects" data-page="projects"><span>Projects</span></a></li>
           <li><a class="nav-link" href="#contact" data-page="contact"><span>Contact</span></a></li>
         </ul>
+        <!-- Theme toggle inside nav for mobile only -->
+        <button id="mobile-theme-toggle" aria-label="Toggle Theme" class="theme-toggle">
+          <i class="fas fa-moon"></i>
+        </button>
       </nav>
       
-      <button id="theme-toggle" aria-label="Toggle Theme">
-        <i class="fas fa-sun"></i>
+      <!-- Desktop theme toggle -->
+      <button id="theme-toggle" aria-label="Toggle Theme" class="theme-toggle">
+        <i class="fas fa-moon"></i>
       </button>
     </aside>
 
@@ -70,7 +84,7 @@
       <!-- Home Page -->
       <section id="home" class="page-content active">
         <h2>Welcome to My Portfolio</h2>
-        <p>Hello, I'm <strong>Ryu</strong> — a passionate full-stack and game developer on the making, focused on user-centered digital experiences.</p>
+        <p>Hello, I'm <strong>Ryu</strong> — a passionate full-stack and game developer in the making, focused on user-centered digital experiences.</p>
         <p>Explore my work and discover my journey through building meaningful projects.</p>
         
         <div class="home-actions">
@@ -146,7 +160,6 @@
           <div class="about-card">
             <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
             <p>Still in progress</p>
-            <!-- Work experience content will go here when available -->
           </div>
         </div>
       </section>
@@ -155,6 +168,14 @@
       <section id="projects" class="page-content">
         <h2>Featured Projects</h2>
         <p class="projects-intro">Here are some of my recent projects.</p>
+        
+        <!-- Project filters -->
+        <div class="projects-filter">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="web">Web Dev</button>
+          <button class="filter-btn" data-filter="game">Game Dev</button>
+          <button class="filter-btn" data-filter="tools">Tools</button>
+        </div>
         
         <!-- Projects grid - dynamically populated from GitHub -->
         <div id="repo-container" class="projects-grid"></div>
@@ -187,7 +208,7 @@
             <div>
               <div class="contact-label">GitHub</div>
               <div class="contact-value">
-                <a href="https://github.com/Ryukagu08" target="_blank">Ryukagu08</a>
+                <a href="https://github.com/Ryukagu08" target="_blank" rel="noopener">Ryukagu08</a>
               </div>
             </div>
           </div>
@@ -201,5 +222,6 @@
   <script src="js/theme-manager.js"></script>
   <script src="js/github-api.js"></script>
   <script src="js/animations.js"></script>
+  <script src="js/mobile-menu.js"></script>
 </body>
 </html>

@@ -1,79 +1,93 @@
 /**
- * github-api.js - Handles GitHub API integration for projects page
+ * GitHub API integration for Projects page
  */
 
-// Language color mapping for repository cards
-const languageColors = {
+// Configuration
+const CONFIG = {
+  username: 'Ryukagu08',
+  perPage: 100,
+  cacheDuration: 30 * 60 * 1000, // 30 minutes
+  excludedRepos: ['TaskManagerApp']
+};
+
+// Category definitions for filtering
+const CATEGORIES = {
+  web: ['html', 'webpage', 'website', 'web-', 'landing-page', 'frontend', 'css', 'page', 'site'],
+  game: ['game', 'unity', 'unreal', 'godot', 'phaser', 'three.js', 'webgl'],
+  tools: ['tool', 'utility', 'bot', 'automation', 'cli']
+};
+
+// Language color mapping
+const LANGUAGE_COLORS = {
   'JavaScript': '#f1e05a',
   'Python': '#3572A5',
   'Java': '#b07219',
-  'Ruby': '#701516',
-  'C++': '#f34b7d',
   'HTML': '#e34c26',
   'CSS': '#563d7c',
   'TypeScript': '#2b7489',
-  'PHP': '#4F5D95',
   'C#': '#178600',
+  'C++': '#f34b7d',
+  'PHP': '#4F5D95',
   'Go': '#00ADD8',
+  'Ruby': '#701516',
   'Swift': '#ffac45',
   'Kotlin': '#F18E33',
   'Rust': '#dea584'
 };
 
-// GitHub emoji mapping for repo descriptions
-const emojiMap = {
-  ':zap:': '⚡',
-  ':smile:': '😄',
-  ':rocket:': '🚀',
-  ':star:': '⭐',
-  ':fire:': '🔥',
-  ':tada:': '🎉',
-  ':heart:': '❤️',
-  ':warning:': '⚠️',
-  ':bug:': '🐛',
-  ':books:': '📚',
-  ':wrench:': '🔧',
-  ':bulb:': '💡'
+// Emoji mapping for GitHub emoji codes
+const EMOJI_MAP = {
+  ':zap:': '⚡', ':smile:': '😄', ':rocket:': '🚀', ':star:': '⭐', 
+  ':fire:': '🔥', ':tada:': '🎉', ':heart:': '❤️', ':warning:': '⚠️',
+  ':bug:': '🐛', ':books:': '📚', ':wrench:': '🔧', ':bulb:': '💡'
+};
+
+// Cache for GitHub API responses
+const repoCache = {
+  data: null,
+  timestamp: 0,
+  expiry: CONFIG.cacheDuration
 };
 
 /**
- * Load GitHub repositories into the projects container
+ * Main function to load repositories
  */
 function loadRepos() {
-  const username = 'Ryukagu08';
   const repoContainer = document.getElementById('repo-container');
   
-  // Exit if no container found
   if (!repoContainer) {
     console.error("Error: #repo-container not found in the DOM.");
     return;
   }
   
-  // Show loading indicator
-  repoContainer.innerHTML = '<div class="loading-indicator"><i class="fas fa-circle-notch fa-spin"></i> Loading projects...</div>';
-
-  // Fetch repositories from GitHub API
-  fetch(`https://api.github.com/users/${username}/repos?sort=updated&direction=desc`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`GitHub API returned ${response.status}`);
-      }
-      return response.json();
-    })
+  // Try to use cached data first
+  if (hasFreshCache()) {
+    const filteredCache = filterExcludedRepos(repoCache.data);
+    displayRepos(filteredCache, repoContainer);
+    setupFilters(filteredCache);
+    return;
+  }
+  
+  showLoading(repoContainer);
+  fetchRepositories()
     .then(repos => {
-      // Handle empty response
-      if (!repos.length) {
-        repoContainer.innerHTML = '<p>No repositories found. Check back soon for new projects!</p>';
+      if (!repos || !repos.length) {
+        showEmptyState(repoContainer);
         return;
       }
       
-      // Clear loading indicator
-      repoContainer.innerHTML = '';
+      // Cache and display repositories
+      repoCache.data = repos;
+      repoCache.timestamp = Date.now();
       
-      // Create repository cards
-      repos.forEach((repo, index) => {
-        createRepoCard(repo, index, repoContainer);
-      });
+      const filteredRepos = filterExcludedRepos(repos);
+      if (!filteredRepos.length) {
+        repoContainer.innerHTML = '<p>No repositories available for display.</p>';
+        return;
+      }
+      
+      displayRepos(filteredRepos, repoContainer);
+      setupFilters(filteredRepos);
     })
     .catch(error => {
       console.error('Error fetching repos:', error);
@@ -82,22 +96,122 @@ function loadRepos() {
 }
 
 /**
- * Create a card for a GitHub repository
- * @param {Object} repo - Repository data from GitHub API
- * @param {number} index - Index for animation delay
- * @param {HTMLElement} container - Container element for the card
+ * Check if we have fresh cached data
+ */
+function hasFreshCache() {
+  return repoCache.data && 
+         (Date.now() - repoCache.timestamp < repoCache.expiry);
+}
+
+/**
+ * Filter out excluded repositories
+ */
+function filterExcludedRepos(repos) {
+  return repos.filter(repo => !CONFIG.excludedRepos.includes(repo.name));
+}
+
+/**
+ * Display loading indicator
+ */
+function showLoading(container) {
+  container.innerHTML = '<div class="loading-indicator"><i class="fas fa-circle-notch fa-spin"></i> Loading projects...</div>';
+}
+
+/**
+ * Show empty state message
+ */
+function showEmptyState(container) {
+  container.innerHTML = '<p>No repositories found. Check back soon for new projects!</p>';
+}
+
+/**
+ * Fetch repositories from GitHub API
+ */
+async function fetchRepositories() {
+  const response = await fetch(
+    `https://api.github.com/users/${CONFIG.username}/repos?sort=updated&direction=desc&per_page=${CONFIG.perPage}`
+  );
+  
+  if (!response.ok) {
+    throw new Error(`GitHub API returned ${response.status}`);
+  }
+  
+  return response.json();
+}
+
+/**
+ * Display repositories with optional filtering
+ */
+function displayRepos(repos, container, filter = 'all') {
+  // Clear container
+  container.innerHTML = '';
+  
+  // Apply filtering
+  const filteredRepos = filterReposByCategory(repos, filter);
+  
+  // Show message if no repos match the filter
+  if (filteredRepos.length === 0) {
+    container.innerHTML = `<p>No projects found in the "${filter}" category.</p>`;
+    return;
+  }
+  
+  // Create repository cards
+  filteredRepos.forEach((repo, index) => {
+    createRepoCard(repo, index, container);
+  });
+  
+  // Animate cards
+  animateRepoCards();
+}
+
+/**
+ * Filter repositories by category
+ */
+function filterReposByCategory(repos, filter) {
+  if (filter === 'all') {
+    return repos;
+  }
+  
+  return repos.filter(repo => {
+    const name = repo.name.toLowerCase();
+    const desc = repo.description ? repo.description.toLowerCase() : '';
+    const lang = repo.language ? repo.language.toLowerCase() : '';
+    
+    if (filter === 'web') {
+      // Special case for web category
+      if (repo.language === 'HTML') return true;
+      
+      // Check for web indicators in name or description
+      return CATEGORIES.web.some(keyword => 
+        name.includes(keyword) || desc.includes(keyword)
+      );
+    }
+    
+    // For other categories, check against category keywords
+    return CATEGORIES[filter].some(keyword => 
+      name.includes(keyword) || desc.includes(keyword) || lang === keyword
+    );
+  });
+}
+
+/**
+ * Create a repository card
  */
 function createRepoCard(repo, index, container) {
-  // Create card element
   const card = document.createElement('div');
-  card.className = 'repo-card card';
+  card.className = 'repo-card';
   card.style.animationDelay = `${index * 0.1}s`;
   card.classList.add('animate-in');
   
-  // Process description with emoji parsing
   const description = repo.description 
     ? parseEmojis(repo.description) 
     : "No description provided.";
+    
+  // Detect project type for tagging
+  const projectType = getProjectType(repo);
+  const projectTypeHTML = projectType 
+    ? `<span class="project-type">${projectType}</span>` 
+    : '';
 
   // Create language indicator if available
   const languageHTML = repo.language 
@@ -111,34 +225,96 @@ function createRepoCard(repo, index, container) {
     ` 
     : '';
   
-  // Set card content
   card.innerHTML = `
-    <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+    ${projectTypeHTML}
+    <h3><a href="${repo.html_url}" target="_blank" rel="noopener">${repo.name}</a></h3>
     <p>${description}</p>
     ${languageHTML}
   `;
   
-  // Add to container
   container.appendChild(card);
 }
 
 /**
- * Get color for programming language or default color
- * @param {string} language - Programming language name
- * @returns {string} Color hex code
+ * Determine project type based on repo metadata
+ */
+function getProjectType(repo) {
+  const name = repo.name.toLowerCase();
+  const desc = repo.description ? repo.description.toLowerCase() : '';
+  
+  // Check for web development
+  if (repo.language === 'HTML' || CATEGORIES.web.some(keyword => 
+      name.includes(keyword) || desc.includes(keyword))) {
+    return 'Web Development';
+  }
+  
+  // Check for game development
+  if (CATEGORIES.game.some(keyword => name.includes(keyword) || desc.includes(keyword))) {
+    return 'Game Development';
+  }
+  
+  // Check for tools
+  if (CATEGORIES.tools.some(keyword => name.includes(keyword) || desc.includes(keyword))) {
+    return 'Tool / Utility';
+  }
+  
+  return null;
+}
+
+/**
+ * Get color for programming language
  */
 function getLanguageColor(language) {
-  return languageColors[language] || '#ccc';
+  return LANGUAGE_COLORS[language] || '#ccc';
 }
 
 /**
  * Parse GitHub emoji codes into Unicode emojis
- * @param {string} text - Text with GitHub emoji codes
- * @returns {string} Text with Unicode emojis
  */
 function parseEmojis(text) {
-  return text.replace(/:\w+:/g, match => emojiMap[match] || match);
+  return text.replace(/:\w+:/g, match => EMOJI_MAP[match] || match);
 }
 
-// Make loadRepos available globally
+/**
+ * Set up filter buttons
+ */
+function setupFilters(repos) {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Update active state
+      filterBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Apply filter
+      const filter = this.getAttribute('data-filter');
+      const repoContainer = document.getElementById('repo-container');
+      
+      if (repoContainer) {
+        displayRepos(repos, repoContainer, filter);
+      }
+    });
+  });
+}
+
+/**
+ * Animate repository cards
+ */
+function animateRepoCards() {
+  const repoCards = document.querySelectorAll('.repo-card');
+  
+  // Remove existing animations
+  repoCards.forEach(card => card.classList.remove('animate-in'));
+  
+  // Re-apply animations with delay
+  setTimeout(() => {
+    repoCards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.classList.add('animate-in');
+    });
+  }, 50);
+}
+
+// Export loadRepos function globally
 window.loadRepos = loadRepos;

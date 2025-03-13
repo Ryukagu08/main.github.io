@@ -2,7 +2,7 @@
  * light-theme.css - Light theme color variables and overrides
  */
 
-:root {
+ :root {
   /* Color Palette */
   --color-bg-primary: #f8f9fa;
   --color-bg-secondary: #ffffff;
@@ -92,13 +92,18 @@ body {
 }
 
 /* Theme Toggle */
-#theme-toggle {
+.theme-toggle {
   color: var(--color-text-primary);
 }
 
-#theme-toggle:hover {
+.theme-toggle:hover {
   color: var(--color-accent-primary);
   background: var(--color-bg-hover);
+}
+
+/* Mobile menu toggle */
+#mobile-menu-toggle {
+  color: var(--color-accent-primary);
 }
 
 /* Content Area */

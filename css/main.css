@@ -1,3 +1,13 @@
+/* main.css - Core layout and positioning styles */
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  cursor: default;
+}
+
 /* Re-enable cursor for interactive elements */
 a, button, 
 input[type="submit"], 
@@ -6,17 +16,6 @@ input[type="reset"],
 .filter-btn,
 [role="button"] {
   cursor: pointer !important;
-}/* 
- * main.css - Core layout and positioning styles
- * No color-specific styles here - those are in theme files
- */
-
-/* Base Reset */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  cursor: default; /* Default cursor for all elements */
 }
 
 html, body {
@@ -26,7 +25,6 @@ html, body {
   line-height: var(--line-height-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Allow text selection but keep default cursor */
 }
 
 /* App Container */
@@ -139,10 +137,16 @@ html, body {
   transition: all var(--transition-normal);
   border-radius: var(--border-radius-md);
   border-left: 3px solid transparent;
+  overflow: hidden;
 }
 
 .main-nav ul li a.nav-link:hover {
   transform: translateX(10px);
+}
+
+.main-nav ul li a.nav-link span {
+  position: relative;
+  z-index: 1;
 }
 
 .main-nav ul li a.nav-link::after {
@@ -155,22 +159,49 @@ html, body {
   transition: background var(--transition-normal);
 }
 
-/* Theme Toggle Button */
-#theme-toggle {
+/* Mobile menu toggle */
+#mobile-menu-toggle {
+  display: none;
   background: transparent;
   border: none;
   font-size: 1.5em;
-  cursor: pointer;
-  margin-top: auto;
+  width: 40px;
+  height: 40px;
+  z-index: var(--z-fixed);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
   padding: var(--space-3);
   transition: all var(--transition-normal);
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  position: relative;
+  z-index: var(--z-fixed);
+  color: var(--color-text-primary);
 }
 
-#theme-toggle:hover {
+.theme-toggle:hover {
   transform: rotate(20deg);
+  color: var(--color-accent-primary);
+  background: var(--color-bg-hover);
+}
+
+#theme-toggle {
+  margin-top: auto;
+  align-self: flex-start;
+  margin-left: 0;
+}
+
+#mobile-theme-toggle {
+  display: none;
+  margin-top: var(--space-10);
+  align-self: flex-start;
+  margin-left: 0;
 }
 
 /* Main Content Area */
@@ -245,6 +276,26 @@ p {
   z-index: var(--z-overlay);
   width: 0;
   transition: all 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Mobile overlay */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--z-fixed) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+  backdrop-filter: blur(3px);
+}
+
+.mobile-overlay.active {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Scrollbar Styling */
