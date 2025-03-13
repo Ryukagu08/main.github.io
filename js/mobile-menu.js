@@ -1,7 +1,14 @@
+/**
+ * mobile-menu.js - Mobile menu functionality
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
   setupMobileMenu();
 });
 
+/**
+ * Set up mobile menu functionality
+ */
 function setupMobileMenu() {
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
   const mainNav = document.querySelector('.main-nav');

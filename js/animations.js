@@ -1,9 +1,16 @@
+/**
+ * animations.js - UI animations and effects
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
   animateInitialContent();
   setupAnimationTriggers();
   setupCursorGlowEffect();
 });
 
+/**
+ * Animate content on initial page load
+ */
 function animateInitialContent() {
   const activePage = document.querySelector('.page-content.active');
   if (!activePage) return;
@@ -31,10 +38,16 @@ function animateInitialContent() {
   }, 100);
 }
 
+/**
+ * Set up animation triggers
+ */
 function setupAnimationTriggers() {
   setupSkillTagEffects();
 }
 
+/**
+ * Set up skill tag hover animations
+ */
 function setupSkillTagEffects() {
   const skillTags = document.querySelectorAll('.skill-tag');
   
@@ -45,6 +58,9 @@ function setupSkillTagEffects() {
   });
 }
 
+/**
+ * Set up cursor glow effect for navigation links
+ */
 function setupCursorGlowEffect() {
   const navLinks = document.querySelectorAll('.main-nav .nav-link');
   

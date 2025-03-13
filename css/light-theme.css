@@ -1,8 +1,14 @@
-/* 
- * light-theme.css - Light theme color variables and overrides
- */
+/* Transition Overlay */
+#transition-overlay {
+  background-color: var(--color-overlay-bg);
+  box-shadow: 4px 0 15px var(--color-shadow);
+}
 
- :root {
+.content-transition {
+  background-color: var(--color-bg-primary);
+}
+
+:root {
   /* Color Palette */
   --color-bg-primary: #f8f9fa;
   --color-bg-secondary: #ffffff;
@@ -134,10 +140,9 @@ p {
   color: var(--color-text-secondary);
 }
 
-/* Transition Overlay */
-#transition-overlay {
-  background-color: var(--color-overlay-bg);
-  box-shadow: -4px 0 15px var(--color-shadow);
+/* Page Transition */
+.page-transition {
+  background-color: var(--color-bg-primary);
 }
 
 /* Scrollbar */

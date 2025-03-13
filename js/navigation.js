@@ -6,6 +6,16 @@
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   handleInitialPage();
+  
+  // Create the content transition element
+  if (!document.querySelector('.content-transition')) {
+    const contentContainer = document.querySelector('.content-container');
+    if (contentContainer) {
+      const contentTransition = document.createElement('div');
+      contentTransition.className = 'content-transition';
+      contentContainer.appendChild(contentTransition);
+    }
+  }
 });
 
 /**
@@ -42,9 +52,13 @@ function navigateToPage(pageName) {
   // Don't navigate if already on the page
   if (isCurrentPage(pageName)) return;
   
-  // Show transition overlay
-  const overlay = document.getElementById('transition-overlay');
-  overlay.style.width = '100%';
+  // Get the content transition overlay
+  const contentTransition = document.querySelector('.content-transition');
+  
+  // Fade in
+  if (contentTransition) {
+    contentTransition.style.opacity = '1';
+  }
   
   // Update browser history
   const newUrl = `#${pageName}`;
@@ -67,10 +81,12 @@ function navigateToPage(pageName) {
     // Apply animations to the page content
     animatePageContent(targetPage);
     
-    // Hide the overlay
-    setTimeout(() => {
-      overlay.style.width = '0';
-    }, 300);
+    // Fade out the transition overlay
+    if (contentTransition) {
+      setTimeout(() => {
+        contentTransition.style.opacity = '0';
+      }, 300);
+    }
   }, 300);
 }
 

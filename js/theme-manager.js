@@ -67,7 +67,7 @@ function toggleTheme() {
   const desktopToggle = document.getElementById('theme-toggle');
   const mobileToggle = document.getElementById('mobile-theme-toggle');
   
-  // Add transition overlay
+  // Add transition overlay - slides from left to right
   const overlay = document.getElementById('transition-overlay');
   overlay.style.width = '100%';
   
