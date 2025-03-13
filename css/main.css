@@ -96,8 +96,8 @@ html, body {
 }
 
 .logo-link:hover img {
-  filter: brightness(0.3);
-  transform: scale(1.05);
+  filter: brightness(0.2);
+  transform: scale(1.02);
 }
 
 .logo-link:hover .home-icon {
