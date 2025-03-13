@@ -102,10 +102,15 @@
   #mobile-theme-toggle {
     display: block;
     margin-top: var(--space-10);
-    color: var(--color-accent-primary);
+    color: var(--color-text-primary);
     align-self: flex-start;
     margin-left: 0;
     z-index: var(--z-fixed);
+  }
+  
+  #mobile-theme-toggle:hover {
+    transform: none;
+    background: transparent;
   }
   
   /* Off-canvas navigation for mobile */
